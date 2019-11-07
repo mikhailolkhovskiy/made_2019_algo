@@ -171,6 +171,7 @@ int* find_rolling_max(int arr[], int n, int k) {
         tempArr[head] = {arr[head], head};
         ++head;
     }
+    delete []tempArr;
     Heap<Entry<int>> heap(tempArr, k);
     result[0] = heap.Top().value;
     int tail = 1;
