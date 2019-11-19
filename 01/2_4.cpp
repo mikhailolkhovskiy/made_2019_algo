@@ -18,9 +18,10 @@ template <class T, class Cmp = std::less<T>>
 class Heap {
  public:
     explicit Heap();
+    Heap(const T[], int);
     ~Heap();
 
-    void Push(T);
+    void Push(const T&);
     T Pop();
     T Top();
     bool IsEmpty();
@@ -42,6 +43,18 @@ Heap<T, Cmp>::Heap()
     size {0},
     comparator {Cmp()}
 {
+}
+
+template <class T, class Cmp>
+Heap<T, Cmp>::Heap(const T arr[], int n) {
+    bufferSize = std::max(MIN_BUFFER_SIZE, n);
+    buffer = new T[bufferSize];
+    size = n;
+    comparator = Cmp();
+    std::copy(arr, arr + n, buffer);
+    for (int i = n/2; i >= 0; --i) {
+        ShiftDown(i);
+    }
 }
 
 template <class T, class Cmp>
@@ -95,7 +108,7 @@ void Heap<T, Cmp>::ShiftDown(int i) {
 }
 
 template <class T, class Cmp>
-void Heap<T, Cmp>::Push(T value) {
+void Heap<T, Cmp>::Push(const T& value) {
     if (IsEmpty()) {
         buffer[0] = value;
     } else {
@@ -151,14 +164,15 @@ struct Entry {
 };
 
 int* find_rolling_max(int arr[], int n, int k) {
-    Heap<Entry<int>> heap;
     int *result = new int[n - k + 1];
     int head = 0;
+    Entry<int>* tempArr = new Entry<int>[k];
     while (head < k) {
-        Entry<int> e = {arr[head], head};
-        heap.Push(e);
+        tempArr[head] = {arr[head], head};
         ++head;
     }
+    Heap<Entry<int>> heap(tempArr, k);
+    delete []tempArr;
     result[0] = heap.Top().value;
     int tail = 1;
     while (head < n) {

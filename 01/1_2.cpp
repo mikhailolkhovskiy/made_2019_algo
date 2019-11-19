@@ -26,9 +26,9 @@ class Deque {
     explicit Deque(int = MIN_BUFFER_SIZE);
     ~Deque();
 
-    void PushFront(T);
+    void PushFront(const T&);
     T PopFront();
-    void PushBack(T);
+    void PushBack(const T&);
     T PopBack();
     bool IsEmpty();
 
@@ -62,7 +62,7 @@ bool Deque<T>::IsEmpty() {
 }
 
 template <typename T>
-void Deque<T>::PushFront(T value) {
+void Deque<T>::PushFront(const T& value) {
     if (IsEmpty()) {
         buffer[head] = value;
     } else {
@@ -86,7 +86,7 @@ T Deque<T>::PopFront() {
 }
 
 template <typename T>
-void Deque<T>::PushBack(T value) {
+void Deque<T>::PushBack(const T& value) {
     if (IsEmpty()) {
         buffer[tail] = value;
     } else {
